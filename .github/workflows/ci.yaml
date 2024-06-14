@@ -23,7 +23,7 @@ jobs:
       - name: Download snap file
         uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.build.outputs.artifact-prefix }}-architecture-*
+          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
 
       - name: Install snap file
         run: |
