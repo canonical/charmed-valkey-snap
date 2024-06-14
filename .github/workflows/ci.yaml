@@ -1,5 +1,5 @@
 # Copyright 2024 Canonical Ltd.
-# See LICENSE file for licensing details.
+# See LICENSE-snap file for licensing details.
 name: Tests
 
 concurrency:
