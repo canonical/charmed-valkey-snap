@@ -20,6 +20,10 @@ jobs:
     needs:
       - build
     steps:
+      - name: Install required dependencies
+        run: |
+          sudo snap install yq
+          
       - name: Download snap file
         uses: actions/download-artifact@v4
         with:
@@ -27,7 +31,9 @@ jobs:
 
       - name: Install snap file
         run: |
-          sudo snap install packed-snap-architecture-amd64
+          version="$(cat snap/snapcraft.yaml | yq .version)"
+          
+          sudo snap install valkey_${version}_amd64.snap
 
       - name: Start snap service
         run: |
