@@ -27,7 +27,7 @@ jobs:
 
       - name: Install snap file
         run: |
-          sudo snap install valkey_${{ needs.build.outputs.version }}_amd64.snap --dangerous --devmode
+          sudo snap install valkey_${{ needs.build.outputs.version }}_amd64.snap
 
       - name: Start snap services
         run: |
