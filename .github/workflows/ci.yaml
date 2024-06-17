@@ -27,9 +27,9 @@ jobs:
 
       - name: Install snap file
         run: |
-          sudo snap install packed-snap-architecture-amd64 --dangerous --devmode
+          sudo snap install packed-snap-architecture-amd64
 
-      - name: Start snap services
+      - name: Start snap service
         run: |
           sudo snap start valkey.server
           sleep 5
