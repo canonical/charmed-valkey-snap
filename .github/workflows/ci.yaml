@@ -33,9 +33,9 @@ jobs:
 
       - name: Start snap service
         run: |
-          sudo snap start valkey.server
+          sudo snap start charmed-valkey.server
           sleep 5
 
       - name: Run valkey cli
         run: |
-          valkey.cli info
+          charmed-valkey.cli info
