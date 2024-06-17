@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v12.6.0
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap_without_cache.yaml@v2
 
   test:
     name: Test Snap
@@ -20,20 +20,16 @@ jobs:
     needs:
       - build
     steps:
-      - name: Install required dependencies
-        run: |
-          sudo snap install yq
-          
-      - name: Download snap file
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
         with:
-          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
+          name: ${{ needs.build.outputs.artifact-name }}
+      - id: get-snap-name
+        run: echo "SNAP_FILE=$(ls *.snap)" >> $GITHUB_OUTPUT
 
       - name: Install snap file
         run: |
-          version="$(cat snap/snapcraft.yaml | yq .version)"
-          
-          sudo snap install valkey_${version}_amd64.snap
+          sudo snap install ${{ steps.get-snap-name.outputs.SNAP_FILE }}
 
       - name: Start snap service
         run: |
