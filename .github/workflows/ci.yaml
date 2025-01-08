@@ -20,10 +20,11 @@ jobs:
     needs:
       - build
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.build.outputs.artifact-name }}
+          pattern: ${{ needs.build.outputs.artifact-prefix }}-*
+          merge-multiple: true
       - id: get-snap-name
         run: echo "SNAP_FILE=$(ls *.snap)" >> $GITHUB_OUTPUT
 
