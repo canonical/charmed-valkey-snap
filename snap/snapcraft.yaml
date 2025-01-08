@@ -64,4 +64,6 @@ parts:
   valkey:
     plugin: nil
     stage-packages:
-      - valkey
+      - valkey-server
+      - valkey-sentinel
+      - valkey-tools
