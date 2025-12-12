@@ -22,6 +22,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # to avoid "cannot install snap base "core26": no snap revision available as specified"
+      # can be removed once core26 is stable
+      - name: Install dependencies
+        run: |
+          sudo snap install core26 --edge
+
       - uses: actions/download-artifact@v4
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*
