@@ -21,16 +21,15 @@ jobs:
       - build
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/download-artifact@v4
         with:
           pattern: ${{ needs.build.outputs.artifact-prefix }}-*
           merge-multiple: true
-      - id: get-snap-name
-        run: echo "SNAP_FILE=$(ls *.snap)" >> $GITHUB_OUTPUT
 
       - name: Install snap file
         run: |
-          sudo snap install ${{ steps.get-snap-name.outputs.SNAP_FILE }} --dangerous
+          sudo snap install --dangerous charmed-valkey*.snap
 
       - name: Start snap service
         run: |
