@@ -67,9 +67,8 @@ apps:
 parts:
   valkey:
     plugin: make
-    source: https://git.launchpad.net/valkey
-    source-type: git
-    source-tag: lp-9.0.1
+    source: sourcecraft:valkey
+    source-channel: 9.0-24.04/edge
     override-build: |
       mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr
       make BUILD_TLS=yes
