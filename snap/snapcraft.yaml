@@ -79,6 +79,7 @@ parts:
       mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr
       make BUILD_TLS=yes
       PREFIX=${SNAPCRAFT_PART_INSTALL}/usr make BUILD_TLS=yes install
+      cp valkey.conf ${SNAPCRAFT_PART_INSTALL}/usr/
     build-packages:
       - libssl-dev
     stage-packages:
