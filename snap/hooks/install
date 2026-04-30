@@ -19,5 +19,5 @@ if [ stat -c '%u' "${CONF}" == 0 ]; then
     chmod -R 770 "${SNAP_DATA}"
 fi
 
-chown -R 584788:584788 "${SNAP_COMMON}"/*
-chown -R 584788:584788 "${SNAP_DATA}"/*
+chown -R 584788:root "${SNAP_COMMON}"/*
+chown -R 584788:root "${SNAP_DATA}"/*
