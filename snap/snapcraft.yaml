@@ -67,7 +67,7 @@ apps:
     environment:
       LANG: C.UTF-8
 
-  metrics_exporter:
+  metrics-exporter:
     daemon: simple
     install-mode: disable
     command: start_redis_exporter.sh
