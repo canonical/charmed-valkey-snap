@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     name: Build snap
-    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v40.0.2
+    uses: canonical/data-platform-workflows/.github/workflows/build_snap.yaml@v49.0.1
 
   test:
     name: Test Snap
@@ -26,7 +26,7 @@ jobs:
       # can be removed once core26 is stable
       - name: Install dependencies
         run: |
-          sudo snap install core26 --edge
+          sudo snap install core26
 
       - uses: actions/download-artifact@v4
         with:
@@ -50,6 +50,7 @@ jobs:
         run: |
           sudo snap start charmed-valkey.sentinel
           sleep 5
+
       - name: Run valkey sentinel info
         run: |
           charmed-valkey.cli -p 26379 sentinel masters
