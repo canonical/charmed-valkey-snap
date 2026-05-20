@@ -91,6 +91,16 @@ parts:
     stage-packages:
       - util-linux
 
+  metrics_exporter:
+    plugin: go
+    after:
+      - valkey-user
+    source: https://github.com/canonical/redis_exporter.git
+    source-type: git
+    source-branch: "v1.83.0"
+    build-snaps:
+      - go/1.26/stable
+
   wrapper:
     plugin: dump
     source: snap/local
