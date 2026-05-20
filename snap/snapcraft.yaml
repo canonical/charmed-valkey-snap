@@ -29,49 +29,56 @@ apps:
     plugs:
       - network
       - network-bind
-      - network-observe
-      - home
+
   cli:
     command: usr/bin/valkey-cli
     plugs:
       - network
       - network-bind
-      - network-observe
-      - home
+
   benchmark:
     command: usr/bin/valkey-benchmark
     plugs:
       - network
       - network-bind
-      - network-observe
-      - home
+
   check-aof:
     command: usr/bin/valkey-check-aof
     plugs:
       - network
       - network-bind
       - network-observe
-      - home
+
   check-rdb:
     command: usr/bin/valkey-check-rdb
     plugs:
       - network
       - network-bind
-      - network-observe
-      - home
+
   sentinel:
     command: start_sentinel.sh
     daemon: simple
     install-mode: disable
     restart-condition: always
     restart-delay: 20s
-    environment:
-      LANG: C.UTF-8
     plugs:
       - network
       - network-bind
-      - network-observe
-      - home
+    environment:
+      LANG: C.UTF-8
+
+  metrics_exporter:
+    daemon: simple
+    install-mode: disable
+    command: start_redis_exporter.sh
+    restart-condition: always
+    restart-delay: 5s
+    plugs:
+      - network
+      - network-bind
+    environment:
+      LANG: C.UTF-8
+
 
 parts:
   valkey:
@@ -93,8 +100,6 @@ parts:
 
   metrics_exporter:
     plugin: go
-    after:
-      - valkey-user
     source: https://github.com/canonical/redis_exporter.git
     source-type: git
     source-branch: "v1.83.0"
