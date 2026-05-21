@@ -1,7 +1,7 @@
 name: charmed-valkey
 base: core26
 build-base: devel # can be removed once 26.04 was released to `stable`
-version: "9.0.1"
+version: "9.0.3"
 summary: "Valkey: open source, in memory datastore as a snap" # 79 char long summary
 description: |
   A flexible distributed key-value database that is optimized 
@@ -82,21 +82,22 @@ apps:
 
 parts:
   valkey:
-    plugin: make
-    source: https://git.launchpad.net/valkey
-    source-type: git
-    source-tag: lp-9.0.1
-    override-build: |
-      mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr
-      mkdir -p ${SNAPCRAFT_PART_INSTALL}/etc
-      make BUILD_TLS=yes
-      PREFIX=${SNAPCRAFT_PART_INSTALL}/usr make BUILD_TLS=yes install
-      cp valkey.conf ${SNAPCRAFT_PART_INSTALL}/etc/
-      cp sentinel.conf ${SNAPCRAFT_PART_INSTALL}/etc/
-    build-packages:
-      - libssl-dev
+    plugin: nil
     stage-packages:
+      - valkey-server
+      - valkey-sentinel
+      - valkey-tools
       - util-linux
+    # TODO: remove below when correctly implementing DA025: https://docs.google.com/document/d/1MyT4Wt_-vgPwhwEjC-oeHRdLYrZWaQzFGTwclT7hD1U/edit?tab=t.0
+    override-prime: |
+      craftctl default
+      mkdir -p "$CRAFT_PRIME/etc"
+      if [ -f "$CRAFT_PRIME/etc/valkey/valkey.conf" ]; then
+        cp "$CRAFT_PRIME/etc/valkey/valkey.conf" "$CRAFT_PRIME/etc/valkey.conf"
+      fi
+      if [ -f "$CRAFT_PRIME/etc/valkey/sentinel.conf" ]; then
+        cp "$CRAFT_PRIME/etc/valkey/sentinel.conf" "$CRAFT_PRIME/etc/sentinel.conf"
+      fi
 
   metrics_exporter:
     plugin: go
