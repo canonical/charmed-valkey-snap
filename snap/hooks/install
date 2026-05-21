@@ -3,12 +3,20 @@
 # create Valkey's working directory
 DATA="${SNAP_COMMON}"/var/lib/charmed-valkey
 CONF="${SNAP_DATA}"/etc/charmed-valkey
-mkdir -p "${DATA}"
-mkdir -p "${CONF}"
+RUN="${SNAP_DATA}/run"
+mkdir -p "${DATA}" "${CONF}" "${RUN}"
 
 # add default config file
-cp "${SNAP}"/etc/valkey.conf "${CONF}"/
-cp "${SNAP}"/etc/sentinel.conf "${CONF}"/
+cp "${SNAP}"/etc/valkey/valkey.conf "${CONF}"/
+cp "${SNAP}"/etc/valkey/sentinel.conf "${CONF}"/
+
+# replace pid files
+for conf in "${CONF}/valkey.conf" "${CONF}/sentinel.conf"; do
+  sed -i \
+    -e 's|^dir .*|dir '"${DATA}"'|' \
+    -e 's|^pidfile .*|pidfile '"${SNAP_DATA}"'/run/valkey.pid|' \
+    "${conf}"
+done
 
 # If we just created the directories, we set up permissions
 if [ stat -c '%u' "${DATA}" == 0 ]; then

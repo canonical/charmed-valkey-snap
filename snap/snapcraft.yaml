@@ -29,31 +29,7 @@ apps:
     plugs:
       - network
       - network-bind
-
-  cli:
-    command: usr/bin/valkey-cli
-    plugs:
-      - network
-      - network-bind
-
-  benchmark:
-    command: usr/bin/valkey-benchmark
-    plugs:
-      - network
-      - network-bind
-
-  check-aof:
-    command: usr/bin/valkey-check-aof
-    plugs:
-      - network
-      - network-bind
-      - network-observe
-
-  check-rdb:
-    command: usr/bin/valkey-check-rdb
-    plugs:
-      - network
-      - network-bind
+      - hardware-observe
 
   sentinel:
     command: start_sentinel.sh
@@ -64,6 +40,7 @@ apps:
     plugs:
       - network
       - network-bind
+      - hardware-observe
     environment:
       LANG: C.UTF-8
 
@@ -79,6 +56,22 @@ apps:
     environment:
       LANG: C.UTF-8
 
+  cli:
+    command: usr/bin/valkey-cli
+    plugs:
+      - network
+
+  benchmark:
+    command: usr/bin/valkey-benchmark
+    plugs:
+      - network
+
+  check-aof:
+    command: usr/bin/valkey-check-aof
+
+  check-rdb:
+    command: usr/bin/valkey-check-rdb
+
 
 parts:
   valkey:
@@ -88,24 +81,28 @@ parts:
       - valkey-sentinel
       - valkey-tools
       - util-linux
-    # TODO: remove below when correctly implementing DA025: https://docs.google.com/document/d/1MyT4Wt_-vgPwhwEjC-oeHRdLYrZWaQzFGTwclT7hD1U/edit?tab=t.0
-    override-prime: |
-      craftctl default
-      mkdir -p "$CRAFT_PRIME/etc"
-      if [ -f "$CRAFT_PRIME/etc/valkey/valkey.conf" ]; then
-        cp "$CRAFT_PRIME/etc/valkey/valkey.conf" "$CRAFT_PRIME/etc/valkey.conf"
-      fi
-      if [ -f "$CRAFT_PRIME/etc/valkey/sentinel.conf" ]; then
-        cp "$CRAFT_PRIME/etc/valkey/sentinel.conf" "$CRAFT_PRIME/etc/sentinel.conf"
-      fi
 
+  # TODO: revert to using the version 1.81.0 from the ubuntu archive if we see we're not missing much
   metrics_exporter:
-    plugin: go
+    plugin: nil
     source: https://github.com/canonical/redis_exporter.git
     source-type: git
-    source-branch: "v1.83.0"
+    source-branch: v1.83.0
     build-snaps:
       - go/1.26/stable
+    override-build: |
+      craftctl default
+      
+      mkdir -p "${CRAFT_PART_INSTALL}/usr/bin"
+      
+      build_date="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      commit_sha="$(git rev-parse HEAD)"
+      
+      go build \
+        -trimpath \
+        -ldflags "-s -w -X main.BuildVersion=v1.83.0 -X main.BuildCommitSha=${commit_sha} -X main.BuildDate=${build_date}" \
+        -o "$CRAFT_PART_INSTALL/usr/bin/redis_exporter" \
+        .
 
   wrapper:
     plugin: dump
