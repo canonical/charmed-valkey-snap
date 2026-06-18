@@ -1,7 +1,7 @@
 name: charmed-valkey
 base: core26
 build-base: devel # can be removed once 26.04 was released to `stable`
-version: "9.0.1"
+version: "9.1.0"
 summary: "Valkey: open source, in memory datastore as a snap" # 79 char long summary
 description: |
   A flexible distributed key-value database that is optimized 
@@ -78,7 +78,7 @@ parts:
     plugin: make
     source: https://git.launchpad.net/valkey
     source-type: git
-    source-tag: lp-9.0.1
+    source-tag: lp-9.1.0
     override-build: |
       mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr
       mkdir -p ${SNAPCRAFT_PART_INSTALL}/etc
