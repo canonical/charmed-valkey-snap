@@ -1,6 +1,5 @@
 name: charmed-valkey
 base: core26
-build-base: devel # can be removed once 26.04 was released to `stable`
 version: "9.0.1"
 summary: "Valkey: open source, in memory datastore as a snap" # 79 char long summary
 description: |
