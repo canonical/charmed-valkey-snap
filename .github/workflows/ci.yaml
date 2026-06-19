@@ -37,6 +37,12 @@ jobs:
         run: |
           sudo snap install --dangerous charmed-valkey*.snap
 
+      - name: Add ldap-module config
+        run: |
+          ldap_module="/snap/charmed-valkey/current/usr/lib/libvalkey_ldap.so"
+          config_file="/var/snap/charmed-valkey/current/etc/charmed-valkey/valkey.conf"
+          echo "loadmodule ${ldap_module}" | sudo tee -a ${config_file}
+
       - name: Start snap service
         run: |
           sudo snap start charmed-valkey.server
