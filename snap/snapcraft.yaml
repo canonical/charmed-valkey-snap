@@ -94,7 +94,9 @@ parts:
     after:
     - valkey
     plugin: rust
-    source: https://github.com/valkey-io/valkey-ldap.git
+    source: https://git.launchpad.net/valkey-ldap
+    source-type: git
+    source-tag: lp-1.1.0
     override-build: |
       mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr/lib
       cargo build --workspace --all-targets --release
