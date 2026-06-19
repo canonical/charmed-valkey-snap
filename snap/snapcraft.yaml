@@ -90,6 +90,18 @@ parts:
     stage-packages:
       - util-linux
 
+  ldap-module:
+    after:
+    - valkey
+    plugin: rust
+    source: https://github.com/valkey-io/valkey-ldap.git
+    override-build: |
+      mkdir -p ${SNAPCRAFT_PART_INSTALL}/usr/lib
+      cargo build --workspace --all-targets --release
+      cp target/release/libvalkey_ldap.so ${SNAPCRAFT_PART_INSTALL}/usr/lib
+    build-packages:
+      - libclang-dev
+
   wrapper:
     plugin: dump
     source: snap/local
