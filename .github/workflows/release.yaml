@@ -12,7 +12,7 @@ env:
 on:
   push:
     branches:
-      - 9-26.04
+      - 9.0-26.04
 
 jobs:
   build:
